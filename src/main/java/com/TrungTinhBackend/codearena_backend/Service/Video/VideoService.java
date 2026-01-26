@@ -30,7 +30,7 @@ public class VideoService {
 
     private String extractPublicIdFromUrl(String videoUrl) {
         String[] parts = videoUrl.split("/");
-        String lastPart = parts[parts.length - 1]; // Lấy phần cuối cùng (chứa public_id)
-        return lastPart.split("\\.")[0]; // Loại bỏ phần mở rộng (vd: .mp4)
+        String lastPart = parts[parts.length - 1];
+        return lastPart.split("\\.")[0];
     }
 }

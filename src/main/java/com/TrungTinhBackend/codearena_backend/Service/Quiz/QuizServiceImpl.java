@@ -115,9 +115,9 @@ public class QuizServiceImpl implements QuizService{
     public APIResponse updateQuiz(Long id, QuizDTO quizDTO, MultipartFile img) throws Exception {
         APIResponse apiResponse = new APIResponse();
 
-//            Lesson lesson = lessonRepository.findById(quizDTO.getLessonId()).orElseThrow(
-//                    () -> new NotFoundException("Lesson not found by id " + quizDTO.getLessonId())
-//            );
+            Lesson lesson = lessonRepository.findById(quizDTO.getLessonId()).orElseThrow(
+                    () -> new NotFoundException("Lesson not found by id " + quizDTO.getLessonId())
+            );
 
             Quiz quiz = quizRepository.findById(id).orElseThrow(
                     () -> new NotFoundException("Quiz not found by id " + id)
@@ -137,9 +137,9 @@ public class QuizServiceImpl implements QuizService{
             if(img != null) {
                 quiz.setImg(imgService.updateImg(quiz.getImg(),img));
             }
-//            if(lesson != null) {
-//                quiz.setLesson(lesson);
-//            }
+            if(lesson != null) {
+                quiz.setLesson(lesson);
+            }
             if (quizDTO.getQuestions() != null && !quizDTO.getQuestions().isEmpty()) {
                 List<Question> questionList = questionRepository.findAllById(
                         quizDTO.getQuestions().stream().map(Question::getId).toList()

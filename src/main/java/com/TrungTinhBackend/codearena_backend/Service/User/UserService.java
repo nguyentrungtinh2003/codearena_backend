@@ -1,6 +1,7 @@
 package com.TrungTinhBackend.codearena_backend.Service.User;
 
 import com.TrungTinhBackend.codearena_backend.DTO.*;
+import com.TrungTinhBackend.codearena_backend.Entity.User;
 import com.TrungTinhBackend.codearena_backend.Enum.RankEnum;
 import com.TrungTinhBackend.codearena_backend.Enum.RoleEnum;
 import com.TrungTinhBackend.codearena_backend.Response.APIResponse;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService {
     public APIResponse login(UserLoginDTO userLoginDTO,
                              HttpServletResponse response, HttpServletRequest request) throws Exception;
+    public APIResponse processOAuthPostLogin(User user);
 
     public APIResponse userRegister(UserRegisterDTO userRegisterDTO) throws Exception;
 
