@@ -140,6 +140,42 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public APIResponse processOAuthPostLogin(User user) {
+        APIResponse apiResponse = new APIResponse();
+
+        User user1 = userRepository.findByEmail(user.getEmail());
+        if (user1 == null) {
+
+User user2 = new User();
+
+            user2.setUsername(user.getUsername());
+            user2.setPassword(passwordEncoder.encode("123456"));
+            user2.setEmail(user.getEmail());
+            user2.setEnabled(true);
+            user2.setCoin(0.0);
+            user2.setPoint(0L);
+            user2.setRoleEnum(RoleEnum.STUDENT);
+            user2.setRankEnum(RankEnum.BRONZE);
+            user2.setStatusUserEnum(StatusUserEnum.ACTIVE);
+            user2.setProvider("Google");
+
+            userRepository.save(user2);
+
+            apiResponse.setStatusCode(200L);
+            apiResponse.setMessage("Save login google success");
+            apiResponse.setData(user2);
+            apiResponse.setTimestamp(LocalDateTime.now());
+            return apiResponse;
+        }
+
+        apiResponse.setStatusCode(200L);
+        apiResponse.setMessage("Save login google success");
+        apiResponse.setData(user1);
+        apiResponse.setTimestamp(LocalDateTime.now());
+        return apiResponse;
+    }
+
+    @Override
     public APIResponse userRegister(UserRegisterDTO userRegisterDTO) throws Exception {
         APIResponse apiResponse = new APIResponse();
 
@@ -157,6 +193,7 @@ public class UserServiceImpl implements UserService{
             user1.setRoleEnum(RoleEnum.STUDENT);
             user1.setRankEnum(RankEnum.BRONZE);
             user1.setStatusUserEnum(StatusUserEnum.ACTIVE);
+            user1.setProvider("Local");
 
             userRepository.save(user1);
 
@@ -622,6 +659,7 @@ public class UserServiceImpl implements UserService{
                 user.setOtp(null);
                 user.setOtpExpiry(null);
                 userRepository.save(user);
+                throw new RuntimeException("OTP has expired");
             }
 
             user.setOtp(null);
