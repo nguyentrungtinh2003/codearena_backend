@@ -1,0 +1,41 @@
+name: Build & Push Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set IMAGE_TAG from git commit
+      run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build jar
+      run: mvn clean package -DskipTests
+
+    - name: Login Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build Docker image
+      run: |
+        docker build \
+        -t nguyentrungtinh/code-arena-backend:${{ env.IMAGE_TAG }} \
+        -t nguyentrungtinh/code-arena-backend:prod \
+        .
+
+
+    - name: Push Docker image
+      run: |
+       docker push nguyentrungtinh/code-arena-backend:${{ env.IMAGE_TAG }}
+       docker push nguyentrungtinh/code-arena-backend:prod
